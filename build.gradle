@@ -1,0 +1,36 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+version = '1.0.0'
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'CF Default App Java',
+          'Implementation-Version': version,
+          'Main-Class': 'com.swisscom.appcloud.defaultapp.java.IndexRoute'
+    }
+    from {
+        (configurations.runtime).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.sparkjava:spark-core:2.5'
+    compile 'com.sparkjava:spark-template-jade:2.3'
+    compile 'org.slf4j:slf4j-simple:1.7.21'
+}
+
+uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'repos'
+       }
+    }
+}

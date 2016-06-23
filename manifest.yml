@@ -1,0 +1,5 @@
+---
+applications:
+- name: default-app-java
+  buildpack: java_buildpack
+  path: build/libs/project-1.0.0.jar
