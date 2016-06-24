@@ -8,11 +8,15 @@ import spark.ModelAndView;
 import spark.template.jade.JadeTemplateEngine;
 
 import static spark.Spark.get;
+import static spark.Spark.port;
 import static spark.Spark.exception;
 import static spark.Spark.staticFiles;
 
 public class IndexRoute {
     public static void main(String[] args) {
+
+        port(getCloudAssignedPort());
+
         staticFiles.location("/public");
 
         get("/", (req, res) -> {
@@ -27,5 +31,13 @@ public class IndexRoute {
         exception(Exception.class, (exception, request, response) -> {
             exception.printStackTrace();
         });
+    }
+
+    private static int getCloudAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 4567; //return default port if cloud port isn't set (i.e. on localhost)
     }
 }
