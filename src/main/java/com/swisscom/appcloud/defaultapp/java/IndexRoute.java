@@ -2,6 +2,7 @@ package com.swisscom.appcloud.defaultapp.java;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import spark.ModelAndView;
 import spark.template.jade.JadeTemplateEngine;
@@ -17,8 +18,8 @@ public class IndexRoute {
         get("/", (req, res) -> {
           Map<String, Object> map = new HashMap<>();
           map.put("envVariables", System.getenv());
-          map.put("reqHeaders", req.headers());
-          map.put("reqParams", req.queryParams());
+          map.put("reqHeaders", req.headers().stream().collect(Collectors.toMap(e -> e, e -> req.headers(e))));
+          map.put("reqParams", req.queryParams().stream().collect(Collectors.toMap(e -> e, e -> req.queryParams(e))));
 
           return new ModelAndView(map, "index");
         }, new JadeTemplateEngine());
