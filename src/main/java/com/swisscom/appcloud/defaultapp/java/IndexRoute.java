@@ -20,12 +20,12 @@ public class IndexRoute {
         staticFiles.location("/public");
 
         get("/", (req, res) -> {
-          Map<String, Object> map = new HashMap<>();
-          map.put("envVariables", System.getenv());
-          map.put("reqHeaders", req.headers().stream().collect(Collectors.toMap(e -> e, e -> req.headers(e))));
-          map.put("reqParams", req.queryParams().stream().collect(Collectors.toMap(e -> e, e -> req.queryParams(e))));
+            Map<String, Object> map = new HashMap<>();
+            map.put("envVariables", System.getenv());
+            map.put("reqHeaders", req.headers().stream().collect(Collectors.toMap(e -> e, e -> req.headers(e))));
+            map.put("reqParams", req.queryParams().stream().collect(Collectors.toMap(e -> e, e -> req.queryParams(e))));
 
-          return new ModelAndView(map, "index");
+            return new ModelAndView(map, "index");
         }, new JadeTemplateEngine());
 
         exception(Exception.class, (exception, request, response) -> {
