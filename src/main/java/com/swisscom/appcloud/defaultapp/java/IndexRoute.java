@@ -5,39 +5,40 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import spark.ModelAndView;
-import spark.template.jade.JadeTemplateEngine;
+import spark.template.velocity.VelocityTemplateEngine;
 
-import static spark.Spark.get;
-import static spark.Spark.port;
-import static spark.Spark.exception;
-import static spark.Spark.staticFiles;
+import static spark.Spark.*;
 
+/**
+ * Render an index page.
+ */
 public class IndexRoute {
+
     public static void main(String[] args) {
+        // Use correct port
+        port(getPort());
 
-        port(getCloudAssignedPort());
-
+        // Serve static files
         staticFiles.location("/public");
 
+        // Render index template
         get("/", (req, res) -> {
-            Map<String, Object> map = new HashMap<>();
-            map.put("envVariables", System.getenv());
-            map.put("reqHeaders", req.headers().stream().collect(Collectors.toMap(e -> e, e -> req.headers(e))));
-            map.put("reqParams", req.queryParams().stream().collect(Collectors.toMap(e -> e, e -> req.queryParams(e))));
+            Map<String, Object> model = new HashMap<>();
+            model.put("envVariables", System.getenv());
+            model.put("reqHeaders", req.headers().stream().collect(Collectors.toMap(e -> e, e -> req.headers(e))));
+            model.put("reqParams", req.queryParams().stream().collect(Collectors.toMap(e -> e, e -> req.queryParams(e))));
 
-            return new ModelAndView(map, "index");
-        }, new JadeTemplateEngine());
-
-        exception(Exception.class, (exception, request, response) -> {
-            exception.printStackTrace();
-        });
+            return new ModelAndView(model, "templates/index.vm");
+        }, new VelocityTemplateEngine());
     }
 
-    private static int getCloudAssignedPort() {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        if (processBuilder.environment().get("PORT") != null) {
-            return Integer.parseInt(processBuilder.environment().get("PORT"));
+    private static int getPort() {
+        if (System.getenv("PORT") != null) {
+            return Integer.parseInt(System.getenv("PORT"));
         }
-        return 4567; //return default port if cloud port isn't set (i.e. on localhost)
+
+        // Default port
+        return 4567;
     }
+
 }
