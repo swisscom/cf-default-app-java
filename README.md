@@ -1,6 +1,6 @@
 # CF Default App Java
 
-The default Java app that will be pushed into the Swisscom Application cloud if no source code is provided.
+The default Java app that will be pushed into the Swisscom Application Cloud if no source code is provided.
 
 Based on [Spark](http://sparkjava.com)
 
