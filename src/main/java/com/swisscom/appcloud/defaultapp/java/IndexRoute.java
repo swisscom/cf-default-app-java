@@ -28,8 +28,10 @@ public class IndexRoute {
             model.put("reqHeaders", req.headers().stream().collect(Collectors.toMap(e -> e, e -> req.headers(e))));
             model.put("reqParams", req.queryParams().stream().collect(Collectors.toMap(e -> e, e -> req.queryParams(e))));
 
-            return new ModelAndView(model, "templates/index.vm");
-        }, new VelocityTemplateEngine());
+            return new VelocityTemplateEngine().render(
+                new ModelAndView(model, "templates/index.vm")
+            );
+        });
     }
 
     private static int getPort() {
