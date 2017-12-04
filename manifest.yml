@@ -2,5 +2,5 @@
 applications:
 - name: default-app-java
   buildpack: java_buildpack
-  memory: 256M
+  memory: 1024M
   path: build/libs/cf-default-app-java-1.0.0.jar
